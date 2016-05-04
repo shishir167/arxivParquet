@@ -54,6 +54,7 @@ def main():
     writeRecordsEdges()
 
 def writeRecordsNodes():
+    return
     df = sqlContext.createDataFrame(NodeList, ["vid", "name", "affiliation", "estart", "eend"])
     df.saveAsParquetFile('./arxivNodes.paraquet')
 
@@ -107,7 +108,7 @@ def processAuthorEdges(authors, pubYear, journalReference, paperTitle):
     global dictEdges;
     index = 1;
     numAuthors = len(authors);
-    auth_key_template = "{} {} {} {} {} {}"
+    auth_key_template = "{} {} {} {}"
 
     journalRef = ''
     if (journalReference is None):
@@ -157,7 +158,7 @@ def processAuthorEdges(authors, pubYear, journalReference, paperTitle):
                     firstAuth = author;
                     secondAuth = coAuthor;
 
-                authKey = auth_key_template.format(dictAuthors[firstAuth], dictAuthors[secondAuth], title, str(journalRef.encode('utf-8'), 'utf-8').replace("\n", ""), date, dateEnd)
+                authKey = auth_key_template.format(dictAuthors[firstAuth], dictAuthors[secondAuth], date, dateEnd)
                 if not authKey in dictEdges: # check if edge record already exists
                     edgesList.append([dictAuthors[firstAuth], dictAuthors[secondAuth], title, str(journalRef.encode('utf-8'), 'utf-8').replace("\n", ""), date, dateEnd])
                     dictEdges.update({authKey : [year]});
